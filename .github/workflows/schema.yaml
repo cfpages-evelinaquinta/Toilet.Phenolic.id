@@ -1,4 +1,4 @@
-name: Update Empty JSON-LD URLs v1.3
+name: Update Empty JSON-LD URLs v1.4
 on:
   workflow_dispatch:
 permissions:
@@ -9,8 +9,6 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
-    - name: Install jq
-      run: sudo apt-get install -y jq
     - name: Find and update empty URLs in JSON-LD schema
       run: |
         REPO_NAME="${GITHUB_REPOSITORY#*/}"
@@ -23,24 +21,16 @@ jobs:
           # Create a temporary file
           temp_file=$(mktemp)
           
-          # Use perl to process the file and only modify JSON-LD content
-          perl -0777 -pe '
-            s/(<script type="application\/ld\+json" class="rank-math-schema">)(.*?)(<\/script>)/
-              my $start = $1;
-              my $json = $2;
-              my $end = $3;
-              # Replace empty URLs with the site URL
-              $json =~ s/"url":""/"url":"https:\/\/'"$REPO_NAME"'"/g;
-              $json =~ s/"item":\{"@id":"",/"item":{"@id":"https:\/\/'"$REPO_NAME"'",/g;
-              $start . $json . $end
-            /gse' "$htmlFile" > "$temp_file"
+          perl -i -pe '
+            BEGIN { undef $/; }
+            s/("url":\s*"")/"url":"https:\/\/'$REPO_NAME'"/g;
+            s/("item":\{"@id":\s*"")/"item":{"@id":"https:\/\/'$REPO_NAME'"/g;
+          ' "$htmlFile"
           
-          # Check if the temporary file is not empty before moving
-          if [ -s "$temp_file" ]; then
-            mv "$temp_file" "$htmlFile"
+          if [ -s "$htmlFile" ]; then
+            echo "Successfully processed $htmlFile"
           else
-            echo "Warning: Empty output file generated for $htmlFile, skipping..."
-            rm "$temp_file"
+            echo "Warning: Empty output file generated for $htmlFile"
           fi
         done
     - name: Commit changes
