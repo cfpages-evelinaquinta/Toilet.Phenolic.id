@@ -1,4 +1,4 @@
-name: Update Empty JSON-LD URLs v1.1
+name: Update Empty JSON-LD URLs v1.2
 on:
   workflow_dispatch:
 permissions:
@@ -23,40 +23,51 @@ jobs:
           # Create a temporary file
           temp_file=$(mktemp)
           
-          # Process the file line by line
-          while IFS= read -r line; do
-            if [[ $line == *'<script type="application/ld+json"'* ]]; then
-              # Print the script tag line as is
+          # Flag to track if we're inside JSON-LD script tag
+          in_script=false
+          json_content=""
+          
+          while IFS= read -r line || [ -n "$line" ]; do
+            if [[ $line == *'<script type="application/ld+json'* ]]; then
+              in_script=true
               echo "$line" >> "$temp_file"
-              
-              # Read the JSON content
-              read -r json_content
-              
-              # Process the JSON content to update empty URLs
-              processed_json=$(echo "$json_content" | jq --arg url "https://$REPO_NAME" '
-                def update_empty_urls:
-                  if type == "object" then
-                    if .url? == "" then
-                      .url = $url
-                    else
-                      . |= with_entries(.value |= update_empty_urls)
-                    end
-                  elif type == "array" then
-                    map(update_empty_urls)
-                  else
-                    .
-                  end;
-                update_empty_urls
-              ')
-              
-              # Write the processed JSON
-              echo "$processed_json" >> "$temp_file"
-              
-              # Read and write the closing script tag
-              read -r closing_line
-              echo "$closing_line" >> "$temp_file"
+              continue
+            fi
+            
+            if [[ $in_script == true ]]; then
+              if [[ $line == *'</script>'* ]]; then
+                # Process collected JSON content
+                if [ ! -z "$json_content" ]; then
+                  processed_json=$(echo "$json_content" | jq --arg url "https://$REPO_NAME" '
+                    def update_empty_urls:
+                      if type == "object" then
+                        to_entries | map(
+                          if .value == "" and .key == "url" then
+                            {key: .key, value: $url}
+                          else if .value | type == "object" then
+                            {key: .key, value: (.value | update_empty_urls)}
+                          else if .value | type == "array" then
+                            {key: .key, value: (.value | map(update_empty_urls))}
+                          else
+                            .
+                          end
+                        ) | from_entries
+                      elif type == "array" then
+                        map(update_empty_urls)
+                      else
+                        .
+                      end;
+                    update_empty_urls
+                  ' 2>/dev/null || echo "$json_content")
+                  echo "$processed_json" >> "$temp_file"
+                fi
+                echo "$line" >> "$temp_file"
+                in_script=false
+                json_content=""
+              else
+                json_content+="$line"
+              fi
             else
-              # Write non-JSON-LD lines as they are
               echo "$line" >> "$temp_file"
             fi
           done < "$htmlFile"
