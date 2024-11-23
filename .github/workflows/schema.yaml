@@ -1,4 +1,4 @@
-name: Update Empty JSON-LD URLs v1.4
+name: Update Empty JSON-LD URLs v1.5
 on:
   workflow_dispatch:
 permissions:
@@ -18,13 +18,41 @@ jobs:
         find . -type f -name "*.html" | while read -r htmlFile; do
           echo "Processing file: $htmlFile"
           
-          # Create a temporary file
-          temp_file=$(mktemp)
+          # Get the relative path from the root of the repository
+          relativePath="${htmlFile#./}"
+          dirPath=$(dirname "$relativePath")
+          fileName=$(basename "$htmlFile" .html)
+          
+          # Special handling for index.html files
+          if [ "$fileName" = "index" ]; then
+            if [ "$dirPath" = "." ]; then
+              urlPath=""  # Homepage
+            else
+              urlPath="/$dirPath"  # Index in subfolder
+            fi
+          else
+            # Regular files
+            if [ "$dirPath" = "." ]; then
+              urlPath="/$fileName"
+            else
+              urlPath="/$dirPath/$fileName"
+            fi
+          fi
+          
+          # Remove any double slashes that might occur
+          urlPath=$(echo "$urlPath" | sed 's#//#/#g')
+          
+          # Construct the full URL
+          fullURL="https://$REPO_NAME$urlPath"
+          echo "Generated URL for $htmlFile: $fullURL"
+          
+          # Escape forward slashes for perl
+          escapedURL=$(echo "$fullURL" | sed 's/\//\\\//g')
           
           perl -i -pe '
             BEGIN { undef $/; }
-            s/("url":\s*"")/"url":"https:\/\/'$REPO_NAME'"/g;
-            s/("item":\{"@id":\s*"")/"item":{"@id":"https:\/\/'$REPO_NAME'"/g;
+            s/("url":\s*"")/"url":"'$escapedURL'"/g;
+            s/("item":\{"@id":\s*"")/"item":{"@id":"'$escapedURL'"/g;
           ' "$htmlFile"
           
           if [ -s "$htmlFile" ]; then
