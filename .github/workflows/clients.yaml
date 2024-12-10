@@ -1,4 +1,4 @@
-name: Update Multiple Clients v.8.36
+name: Update Multiple Clients v.8.37
 
 on:
   push:
@@ -209,7 +209,7 @@ jobs:
               /<div[^>]*class="[^"]*(whatsapp-floating|sms-floating)[^"]*"/ {
                 while (getline && !/<\/div>/) {
                   if (match($0, /href="([^"]+)"/, arr)) {
-                    if ($0 ~ /📞/) { next }  # Skip if contains phone emoji
+                    if ($0 ~ /[📞☎️]/) { next }  # Skip if contains phone emojis
                     print arr[1]
                     exit
                   }
@@ -219,7 +219,7 @@ jobs:
               if [ -z "$OLD_WAURL" ]; then
                 OLD_WAURL=$(awk '
                   /https:\/\/((api\.whatsapp\.com|what\.sapp\.my\.id)|(klik|link)\.[^"\/]+)/ {
-                    if ($0 ~ /📞/) { next }  # Skip if contains phone emoji
+                    if ($0 ~ /[📞☎️]/) { next }  # Skip if contains phone emojis
                     match($0, /href="([^"]+)"/, arr)
                     print arr[1]
                     exit
