@@ -18,9 +18,9 @@ Scope: article media planning only. No prose, HTML hydration, sitemap edit, depl
 | Image ID | Repository path | Relative URL | Filename inference |
 |---|---|---|---|
 | LOCAL-001 | `wp-content/uploads/2024/11/toilet-phenolic.jpg` | `/wp-content/uploads/2024/11/toilet-phenolic.jpg` | toilet phenolic |
-| LOCAL-002 | `wp-content/uploads/2024/11/Cubicle-Toilet-Phenolic-Desain-Two-Tone-2.png` | `/wp-content/uploads/2024/11/Cubicle-Toilet-Phenolic-Desain-Two-Tone-2.png` | Cubicle Toilet Phenolic Desain Two Tone 2 |
-| LOCAL-003 | `wp-content/uploads/2024/11/Single-Door.jpg` | `/wp-content/uploads/2024/11/Single-Door.jpg` | Single Door |
-| LOCAL-004 | `wp-content/uploads/2024/11/Cubicle-Toilet-Phenolic-Desain-Two-Tone-3.png` | `/wp-content/uploads/2024/11/Cubicle-Toilet-Phenolic-Desain-Two-Tone-3.png` | Cubicle Toilet Phenolic Desain Two Tone 3 |
+| LOCAL-002 | `wp-content/uploads/2026/10/kubikel-two-tone-arsitektur-v2.webp` | `/wp-content/uploads/2026/10/kubikel-two-tone-arsitektur-v2.webp` | Cubicle Toilet Phenolic Desain Two Tone 2 |
+| LOCAL-003 | `wp-content/uploads/2026/10/kubikel-single-door-arsitektur-v3.webp` | `/wp-content/uploads/2026/10/kubikel-single-door-arsitektur-v3.webp` | Single Door |
+| LOCAL-004 | `wp-content/uploads/2026/10/kubikel-two-tone-arsitektur-v2.webp` | `/wp-content/uploads/2026/10/kubikel-two-tone-arsitektur-v2.webp` | Cubicle Toilet Phenolic Desain Two Tone 3 |
 | LOCAL-005 | `wp-content/uploads/2024/11/Cubicle-Toilet-Phenolic-Desain-Full-Height.png` | `/wp-content/uploads/2024/11/Cubicle-Toilet-Phenolic-Desain-Full-Height.png` | Cubicle Toilet Phenolic Desain Full Height |
 | LOCAL-006 | `wp-content/uploads/2024/11/wastafel-phenolic-4.jpg` | `/wp-content/uploads/2024/11/wastafel-phenolic-4.jpg` | wastafel phenolic 4 |
 | LOCAL-007 | `wp-content/uploads/2024/11/Partisi-Sekat-Urinoir-Phenolic.jpg` | `/wp-content/uploads/2024/11/Partisi-Sekat-Urinoir-Phenolic.jpg` | Partisi Sekat Urinoir Phenolic |

@@ -69,7 +69,7 @@ sources:
 - **Image ID:** `LOCAL-004`
 - **Source type:** `local`
 - **Placement:** after the opening has answered the main question, before the first detailed H2
-- **Exact Markdown to insert:** `![Ilustrasi Cubicle Toilet Phenolic Desain Two Tone 3](/wp-content/uploads/2024/11/Cubicle-Toilet-Phenolic-Desain-Two-Tone-3.png)`
+- **Exact Markdown to insert:** `![Ilustrasi Cubicle Toilet Phenolic Desain Two Tone 3](/wp-content/uploads/2026/10/kubikel-two-tone-arsitektur-v2.webp)`
 - **Caption/credit:** Aset lokal proyek; jangan klaim sebagai dokumentasi proyek tertentu.
 - **Selection basis:** filename/source metadata identifies `Cubicle Toilet Phenolic Desain Two Tone 3` as relevant content media; no pixels were inspected.
 - **Hard boundary:** do not infer or describe unseen visual details, project ownership, location, people, brands, condition, performance, or outcome.
